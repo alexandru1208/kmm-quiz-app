@@ -1,0 +1,11 @@
+CREATE TABLE category(
+    id INTEGER PRIMARY KEY NOT NULL,
+    name TEXT NOT NULL
+);
+
+
+getCategories:
+SELECT * FROM category;
+
+insertCategoty:
+INSERT OR REPLACE INTO category (id, name) VALUES ?;

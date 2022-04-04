@@ -2,17 +2,17 @@ import deps.implementation
 
 plugins {
     id("com.android.application")
+    kotlin("plugin.serialization")
     kotlin("android")
 }
 
 dependencies {
     implementation(project(":shared"))
-    implementation(project(":sqldelight"))
-    implementation(project(":ktor"))
-    implementation(project(":domain"))
+    implementation(project(":base"))
     implementation(deps.AndroidApp.all)
     implementation(deps.Compose.all)
     implementation(deps.Koin.all)
+    implementation(deps.Kotlin.serialization)
 }
 
 android {
@@ -42,7 +42,6 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
-        useIR = true
     }
 
     composeOptions {

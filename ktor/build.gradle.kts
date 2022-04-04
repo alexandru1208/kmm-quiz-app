@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
-    kotlin("native.cocoapods")
     kotlin("plugin.serialization")
     id("com.android.library")
 }
@@ -19,14 +18,6 @@ kotlin {
             ::iosX64
 
     iosTarget("ios") {}
-
-    cocoapods {
-        summary = "Some description for the Shared Module"
-        homepage = "Link to the Shared Module homepage"
-        ios.deploymentTarget = config.IOSAppConfig.deploymentTarget
-        frameworkName = "ktor"
-        podfile = project.file("../iosApp/Podfile")
-    }
 
     sourceSets {
         val commonMain by getting {

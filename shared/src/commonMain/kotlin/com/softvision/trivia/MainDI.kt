@@ -1,5 +1,6 @@
 package com.softvision.trivia
 
+import com.softvision.trivia.createquiz.di.createQuizModule
 import com.softvision.trivia.domain.domainModule
 import com.softvision.trivia.ktor.networkingModule
 import com.softvision.trivia.sqldelight.databaseModule
@@ -12,6 +13,10 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) =
         modules(
             networkingModule() +
                     databaseModule() +
-                    domainModule()
+                    domainModule() +
+                    createQuizModule()
         )
     }
+
+// This is used from Swift
+fun initKoin() = initKoin {}

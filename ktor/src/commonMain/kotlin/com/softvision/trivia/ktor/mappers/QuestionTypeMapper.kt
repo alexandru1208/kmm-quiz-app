@@ -13,6 +13,6 @@ object QuestionTypeMapper {
     fun toDomain(apiType: String) = when (apiType) {
         "boolean" -> QuestionType.TRUE_FALSE
         "multiple" -> QuestionType.MULTIPLE_CHOICE
-        else -> QuestionType.UNKNOWN
+        else -> QuestionType.ANY
     }
 }

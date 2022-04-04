@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.Framework
 
 plugins {
     kotlin("multiplatform")
@@ -27,39 +28,34 @@ kotlin {
         podfile = project.file("../iosApp/Podfile")
     }
 
+    // Configure the framework which is generated internally by cocoapods plugin
+    targets.withType<KotlinNativeTarget> {
+        binaries.withType<Framework> {
+//            isStatic = false // SwiftUI preview requires dynamic framework
+            export(project(":domain"))
+            export(project(":createquiz"))
+            export(project(":base"))
+//            transitiveExport = true
+        }
+    }
+
+
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(deps.Kotlin.serialization)
                 implementation(deps.Kotlin.coroutines)
                 implementation(deps.Koin.core)
-                implementation(project(":domain"))
                 implementation(project(":sqldelight"))
                 implementation(project(":ktor"))
+                api(project(":ktor"))
+                api(project(":domain"))
+                api(project(":createquiz"))
             }
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-            }
-        }
-        val androidMain by getting{
-            dependencies{
-                implementation(project(":ktor"))
-            }
-        }
-        val androidTest by getting {
-            dependencies {
-                implementation(kotlin("test-junit"))
-                implementation("junit:junit:4.13.2")
-            }
-        }
-        val iosMain by getting{
-            dependencies{
-                implementation(project(":ktor"))
-            }
-        }
+        val commonTest by getting
+        val androidMain by getting
+        val androidTest by getting
+        val iosMain by getting
         val iosTest by getting
     }
 }

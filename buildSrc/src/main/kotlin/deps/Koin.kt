@@ -11,6 +11,6 @@ object Koin {
     val all = listOf(core, android, compose)
 
     object Versions {
-        const val koin = "3.1.2"
+        const val koin = "3.1.5"
     }
 }

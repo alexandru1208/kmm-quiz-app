@@ -29,9 +29,9 @@ object Compose {
     )
 
     object Versions {
-        const val compose = "1.0.0"
-        const val activity = "1.3.0-alpha07"
-        const val viewModel = "1.0.0-alpha04"
-        const val navigation = "1.0.0-alpha10"
+        const val compose = "1.1.0-rc01"
+        const val activity = "1.3.1"
+        const val viewModel = "1.0.0-alpha07"
+        const val navigation = "2.4.0-rc01"
     }
 }

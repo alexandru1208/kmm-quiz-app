@@ -9,6 +9,6 @@ object BuildScript {
 
     object Versions {
         const val androidGradle = "7.1.0-alpha02"
-        const val kotlin = "1.5.10"
+        const val kotlin = "1.6.0"
     }
 }

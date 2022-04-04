@@ -8,7 +8,7 @@ object DifficultyMapper {
         "easy" -> Difficulty.EASY
         "medium" -> Difficulty.MEDIUM
         "hard" -> Difficulty.HARD
-        else -> Difficulty.UNKOWN
+        else -> Difficulty.ANY
     }
 
     fun fromDomain(difficulty: Difficulty) = when (difficulty) {

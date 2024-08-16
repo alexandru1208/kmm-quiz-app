@@ -1,71 +1,56 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-
 plugins {
-    kotlin("multiplatform")
-    id("com.android.library")
-    id("com.squareup.sqldelight")
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.sqldelight)
+    alias(libs.plugins.androidLibrary)
 }
 
 version = "1.0"
 
 kotlin {
-    android()
-
-    val iosTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget =
-        if (System.getenv("SDK_NAME")?.startsWith("iphoneos") == true)
-            ::iosArm64
-        else
-            ::iosX64
-
-    iosTarget("ios") {}
+    androidTarget()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(deps.SqlDelight.runtime)
-                implementation(deps.SqlDelight.coroutines)
-                implementation(deps.Koin.core)
-                implementation(project(":domain"))
-            }
+        commonMain.dependencies {
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines)
+            implementation(libs.kotlin.coroutines.core)
+            implementation(libs.koin.core)
+            implementation(libs.stately.common)
+            implementation(project(":domain"))
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-            }
-        }
-        val androidMain by getting {
-            dependencies {
-                implementation(deps.SqlDelight.androidDriver)
-            }
-        }
-        val androidTest by getting {
-            dependencies {
-                implementation(kotlin("test-junit"))
-                implementation("junit:junit:4.13.2")
-            }
-        }
-        val iosMain by getting {
-            dependencies {
-                implementation(deps.SqlDelight.nativeDriver)
 
-            }
+        androidMain.dependencies {
+            implementation(libs.sqldelight.android)
         }
-        val iosTest by getting
+
+        iosMain.dependencies {
+            implementation(libs.sqldelight.native)
+        }
     }
 }
 
 android {
-    compileSdk = config.AndroidAppConfig.compileSdk
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    namespace = "com.mcg.trivia.sqldelight"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+
+    }
     defaultConfig {
-        minSdk = config.AndroidAppConfig.minSdk
-        targetSdk = config.AndroidAppConfig.targetSdk
+        minSdk = libs.versions.android.minSdk.get().toInt()
     }
 }
 
+
 sqldelight {
-    database("Database") {
-        packageName = "com.softvision.trivia.db"
+    databases {
+        create("Database") {
+            packageName.set("com.mcg.trivia.db")
+        }
     }
+    linkSqlite = true
 }

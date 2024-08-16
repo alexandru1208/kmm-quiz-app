@@ -1,12 +1,12 @@
 import SwiftUI
-import shared
+import Shared
 
 struct CreateQuizScreen: View {
 
     @ObservedObject var viewModel = IOSViewModel<
     CreateQuizIntent,
     CreateQuizState,
-    CreateQuizChange.CreateQuizEvent
+    CreateQuizEvent
     >(commonViewModel: CreateQuizViewModelFactory().create())
 
     var body: some View {
@@ -16,19 +16,19 @@ struct CreateQuizScreen: View {
             }
             VStack {
                 NumberOfQuestionsSelector(nrQuestions: state.nrOfQuestions) {
-                    viewModel.onIntent(intent: CreateQuizIntent.NumberOfQuestionsChanged(nrQuestions: $0))
+                    viewModel.handleIntent(intent: CreateQuizIntent.NumberOfQuestionsChange(nrQuestions: $0))
                 }
                 QuestionTypeSelector(selectedType: state.selectedType) {
-                    viewModel.onIntent(intent: CreateQuizIntent.TypeSelected(type: $0))
+                    viewModel.handleIntent(intent: CreateQuizIntent.TypeSelect(type: $0))
                 }
                 DifficultySelector(selectedDifficulty: state.selectedDifficulty) {
-                    viewModel.onIntent(intent: CreateQuizIntent.DifficultySelected(difficulty: $0))
+                    viewModel.handleIntent(intent: CreateQuizIntent.DifficultySelect(difficulty: $0))
                 }
                 CategorySelector(categories: state.categories, selectedCategory: state.selectedCategory) {
-                    viewModel.onIntent(intent: CreateQuizIntent.CategorySelected(category: $0))
+                    viewModel.handleIntent(intent: CreateQuizIntent.CategorySelect(category: $0))
                 }
                 Button("Create Quiz") {
-                    viewModel.onIntent(intent: CreateQuizIntent.StartQuizButtonClicked())
+                    viewModel.handleIntent(intent: CreateQuizIntent.StartQuizButtonClick())
                 }
             }
                     .padding(8)
@@ -118,12 +118,12 @@ struct DifficultySelector: View {
 }
 
 struct CategorySelector: View {
-    let categories: [shared.Category]
-    let onChange: (shared.Category) -> Void
+    let categories: [Shared.Category]
+    let onChange: (Shared.Category) -> Void
 
-    @State private var selectedCategory: shared.Category
+    @State private var selectedCategory: Shared.Category
 
-    init(categories: [shared.Category], selectedCategory: shared.Category, onChange: @escaping (shared.Category) -> Void) {
+    init(categories: [Shared.Category], selectedCategory: Shared.Category, onChange: @escaping (Shared.Category) -> Void) {
         self.categories = categories
         self.onChange = onChange
         self.selectedCategory = selectedCategory

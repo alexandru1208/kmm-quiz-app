@@ -3,7 +3,7 @@
 // Copyright (c) 2022 orgName. All rights reserved.
 //
 
-import shared
+import Shared
 
 class IOSViewModel<I: Intent, S: UIState, E: Event>: ObservableObject {
 
@@ -23,8 +23,8 @@ class IOSViewModel<I: Intent, S: UIState, E: Event>: ObservableObject {
         }
     }
 
-    func onIntent(intent: I) {
-        commonViewModel.onIntent(intent: intent)
+    func handleIntent(intent: I) {
+        commonViewModel.handleIntent(intent: intent)
     }
 
     deinit {

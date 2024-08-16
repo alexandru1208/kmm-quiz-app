@@ -1,65 +1,47 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-
 plugins {
-    kotlin("multiplatform")
-    kotlin("plugin.serialization")
-    id("com.android.library")
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.androidLibrary)
 }
 
 version = "1.0"
 
 kotlin {
-    android()
-
-    val iosTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget =
-        if (System.getenv("SDK_NAME")?.startsWith("iphoneos") == true)
-            ::iosArm64
-        else
-            ::iosX64
-
-    iosTarget("ios") {}
+    androidTarget()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(deps.Ktor.core)
-                implementation(deps.Ktor.serialization)
-                implementation(deps.Ktor.logging)
-                implementation(deps.Koin.core)
-                implementation(project(":domain"))
-            }
+        commonMain.dependencies {
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.koin.core)
+            implementation(project(":domain"))
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-            }
+
+        androidMain.dependencies {
+            implementation(libs.ktor.client.android)
         }
-        val androidMain by getting {
-            dependencies {
-                implementation(deps.Ktor.androidEngine)
-            }
+
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
-        val androidTest by getting {
-            dependencies {
-                implementation(kotlin("test-junit"))
-                implementation("junit:junit:4.13.2")
-            }
-        }
-        val iosMain by getting {
-            dependencies {
-                implementation(deps.Ktor.iosEngine)
-            }
-        }
-        val iosTest by getting
     }
 }
 
 android {
-    compileSdk = config.AndroidAppConfig.compileSdk
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    namespace = "com.mcg.trivia.ktor"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+
+        targetCompatibility = JavaVersion.VERSION_17
+
+    }
     defaultConfig {
-        minSdk = config.AndroidAppConfig.minSdk
-        targetSdk = config.AndroidAppConfig.targetSdk
+        minSdk = libs.versions.android.minSdk.get().toInt()
     }
 }

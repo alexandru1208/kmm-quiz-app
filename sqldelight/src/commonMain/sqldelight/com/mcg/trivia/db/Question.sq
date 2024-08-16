@@ -1,0 +1,24 @@
+import com.mcg.trivia.domain.entities.Difficulty;
+import com.mcg.trivia.domain.entities.QuestionType;
+import kotlin.String;
+import kotlin.collections.List;
+
+CREATE TABLE question (
+  question TEXT PRIMARY KEY NOT NULL,
+  categoryName TEXT NOT NULL,
+  type TEXT AS QuestionType NOT NULL,
+  difficulty TEXT AS Difficulty NOT NULL,
+  correctAnswer TEXT NOT NULL,
+  wrongAnswers  TEXT AS List<String> NOT NULL
+);
+
+getQuestions:
+SELECT * FROM question WHERE
+difficulty LIKE ? AND
+categoryName LIKE ? AND
+type = ?
+LIMIT ?;
+
+insertQuestion:
+INSERT OR REPLACE INTO question
+(question, categoryName,type,difficulty,correctAnswer,wrongAnswers) VALUES ?;
